@@ -10,8 +10,13 @@ describe Oystercard do
         expect(card.balance).to eq(balance)
       end
 
-      context 'Oyser card can be top up' do
+      context 'Oyser card can be top_up' do
         it { expect(subject).to respond_to(:top_up).with(1).argument }
+
+        it 'returns new balance when topped_up' do
+          amount = 80
+          expect(subject.top_up(amount)).to eq(80)
+        end
       end
     end
   end
