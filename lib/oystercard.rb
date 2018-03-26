@@ -5,8 +5,9 @@ class Oystercard
     :exceeded_limit => 'The amount you are trying to top up is above limit = 90'
   }
 
-  def initialize(balance = 0)
+  def initialize(balance = 0, status = false)
     @balance = balance
+    @status = status
   end
 
   def top_up(amount)
@@ -18,6 +19,18 @@ class Oystercard
   def deduct(amount)
     @balance -= amount
     return @balance
+  end
+
+  def touch_in
+    @status = true
+  end
+
+  def touch_out
+    @status = false
+  end
+
+  def in_journey?
+    return @status
   end
 
   private
