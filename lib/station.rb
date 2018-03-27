@@ -1,8 +1,11 @@
 require_relative 'oystercard'
 
 class Station
-  def initialize(access = false)
+  attr_accessor :zone
+
+  def initialize(access = false, zone = nil)
     @access = access
+    @zone = zone
   end
 
   def pass

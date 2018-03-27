@@ -12,13 +12,10 @@ class Oystercard
     :minimum_fair => 'Minimum amount to start a journey is 1 GBR'
   }
 
-  def initialize(balance = 0, status = false, journey_history = {:entry => [], :exit_station => []})
+  def initialize(balance = 0, journey_history = [], current_journey = nil)
     @balance = balance
-    @status = status
-    @station = nil
     @journey_history = journey_history
-    @entry_array = []
-    @exit_array = []
+    @current_journey = current_journey
   end
 
   def top_up(amount)
@@ -30,20 +27,22 @@ class Oystercard
   def touch_in(station)
     raise ERROR_MESSAGES[:minimum_fair] if !has_minimum?
     station.pass
-    @entry_array << station
-    @journey_history[:entry] = @entry_array
-    @status = true
+    @current_journey = Journey.new
+    @current_journey.entry_station = station
+    @journey_history << @current_journey
+    in_journey?
   end
 
   def touch_out(station)
     deduct(MINIMUM_FAIR)
-    @exit_array << station
-    @journey_history[:exit_station] = @exit_array #write a test
-    @status = false
+    @current_journey.exit_station = station
+    @journey_history[@journey_history.count - 1] = @current_journey
+    @current_journey = nil
+    in_journey?
   end
 
   def in_journey?
-    return @status
+    return !@current_journey.nil?
   end
 
   private
