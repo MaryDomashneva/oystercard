@@ -64,10 +64,21 @@ describe Oystercard do
       it 'and it raises an error when touch in and card has not enough money for a journey' do
         expect { subject.touch_in(station) }.to  raise_error(ERROR_MESSAGES[:minimum_fair])
       end
+      it 'saves a station when touch in' do
+        subject.top_up(10)
+        subject.touch_in(station)
+        expect(subject.journey_history).to eq({:entry => [station], :exit_station => []})
+      end
       it 'when touch out it changes the balane on the card' do
         subject.top_up(10)
         subject.touch_in(station)
         expect{ subject.balance }.to change { subject.send(:deduct, MINIMUM_FAIR) }.by(-1)
+      end
+      it 'saves a station when touch out' do
+        subject.top_up(10)
+        subject.touch_in(station)
+        subject.touch_out(station)
+        expect(subject.journey_history).to eq({:entry => [station], :exit_station => [station]})
       end
     end
   end
