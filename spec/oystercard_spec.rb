@@ -8,10 +8,14 @@ ERROR_MESSAGES = {
 
 describe Oystercard do
   context 'Newly initialized Oyster card has a default balance' do
-    it { expect(subject).to respond_to :touch_in }
+    it { expect(subject).to respond_to(:touch_in).with(1).argument  }
     it { expect(subject).to respond_to :touch_out}
     it { expect(subject).to respond_to :in_journey?}
     it { expect(subject).to respond_to(:top_up).with(1).argument }
+    let(:station) { double :station }
+    before {
+      allow(station).to receive(:pass).and_return(true)
+    }
 
 
     context 'when initial balance set-up to "0"' do
@@ -48,21 +52,21 @@ describe Oystercard do
     context 'Oyster card can be in a journey' do
       it 'return status false when touch out' do
         subject.top_up(10)
-        subject.touch_in
-        subject.touch_out
+        subject.touch_in(station)
+        subject.touch_out(station)
         expect(subject.in_journey?).to eq(false)
       end
       it 'and it returns true when touch in and card has enough money for a journey' do
         subject.top_up(10)
-        subject.touch_in
+        subject.touch_in(station)
         expect(subject.in_journey?).to eq(true)
       end
       it 'and it raises an error when touch in and card has not enough money for a journey' do
-        expect { subject.touch_in }.to  raise_error(ERROR_MESSAGES[:minimum_fair])
+        expect { subject.touch_in(station) }.to  raise_error(ERROR_MESSAGES[:minimum_fair])
       end
       it 'when touch out it changes the balane on the card' do
         subject.top_up(10)
-        subject.touch_in
+        subject.touch_in(station)
         expect{ subject.balance }.to change { subject.send(:deduct, MINIMUM_FAIR) }.by(-1)
       end
     end
