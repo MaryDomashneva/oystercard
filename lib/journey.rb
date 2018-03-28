@@ -8,4 +8,9 @@ class Journey
     self.entry_station = entry_station
     self.exit_station = exit_station
   end
+
+  def complete?
+    return true if exit_station != nil && entry_station != nil
+    return false if exit_station == nil || entry_station == nil
+  end
 end

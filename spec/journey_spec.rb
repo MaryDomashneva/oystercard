@@ -1,8 +1,21 @@
 require 'oystercard'
 
 describe Journey do
-  context 'when new' do
+  context 'when newly initialized' do
     let(:station) { double :station }
+
+    it { expect(subject).to respond_to :complete?}
+
+    it 'returns true if entry&exit station exists' do
+      subject.exit_station = station
+      subject.entry_station = station
+      expect(subject.complete?).to eq(true)
+    end
+
+    it 'returns false if exit station does not exist' do
+      subject.exit_station = nil
+      expect(subject.complete?).to eq(false)
+    end
 
     it 'has initial entry station set to nil' do
       entry_station = nil

@@ -1,10 +1,12 @@
 require_relative 'station'
 require_relative 'journey'
+require_relative 'fare_calculator'
 
 class Oystercard
   attr_reader :balance
-  attr_reader :status
+  attr_reader :current_journey
   attr_reader :journey_history
+
   DEFAULT_CAPACITY = 90
   MINIMUM_FAIR = 1
   ERROR_MESSAGES = {
@@ -12,10 +14,11 @@ class Oystercard
     :minimum_fair => 'Minimum amount to start a journey is 1 GBR'
   }
 
-  def initialize(balance = 0, journey_history = [], current_journey = nil)
+  def initialize(balance = 0, journey_history = [], current_journey = nil, fare_calculator = FareCalculator.new)
     @balance = balance
     @journey_history = journey_history
     @current_journey = current_journey
+    @fare_calculator = fare_calculator
   end
 
   def top_up(amount)
@@ -34,9 +37,10 @@ class Oystercard
   end
 
   def touch_out(station)
-    deduct(MINIMUM_FAIR)
     @current_journey.exit_station = station
     @journey_history[@journey_history.count - 1] = @current_journey
+    amount = @fare_calculator.calculator(@current_journey)
+    deduct(amount)
     @current_journey = nil
     in_journey?
   end
