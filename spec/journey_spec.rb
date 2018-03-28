@@ -4,7 +4,7 @@ describe Journey do
   context 'when newly initialized' do
     let(:station) { double :station }
 
-    it { expect(subject).to respond_to :complete?}
+    it { expect(subject).to respond_to :complete? }
 
     it 'returns true if entry&exit station exists' do
       subject.exit_station = station

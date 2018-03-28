@@ -2,23 +2,22 @@ require 'oystercard'
 DEFAULT_CAPACITY = 90
 MINIMUM_FAIR = 1
 ERROR_MESSAGES = {
-  :exceeded_limit => 'The amount you are trying to top up is above limit = 90 GBR',
-  :minimum_fair => 'Minimum amount to start a journey is 1 GBR'
-}
+  exceeded_limit: 'The amount you are trying to top up is above limit = 90 GBR',
+  minimum_fair: 'Minimum amount to start a journey is 1 GBR'
+}.freeze
 
 describe Oystercard do
   context 'when initialized responds to methods' do
-    it { expect(subject).to respond_to(:touch_in).with(1).argument  }
-    it { expect(subject).to respond_to :touch_out}
-    it { expect(subject).to respond_to :in_journey?}
+    it { expect(subject).to respond_to(:touch_in).with(1).argument }
+    it { expect(subject).to respond_to :touch_out }
+    it { expect(subject).to respond_to :in_journey? }
     it { expect(subject).to respond_to(:top_up).with(1).argument }
 
     let(:station) { double :station }
 
-    before {
+    before do
       allow(station).to receive(:pass).and_return(true)
-    }
-
+    end
 
     context 'when initial balance set-up to "0"' do
       it 'uses that balance' do
@@ -56,14 +55,14 @@ describe Oystercard do
       let(:station_2) { double :station }
       let(:journey) { double :journey }
 
-      before {
+      before do
         allow(journey).to receive(:entry_station).and_return(station_1)
         allow(journey).to receive(:exit_station).and_return(station_2)
         allow(station_1).to receive(:zone).and_return(1)
         allow(station_1).to receive(:pass)
         allow(station_2).to receive(:zone).and_return(5)
         allow(station_2).to receive(:pass)
-      }
+      end
 
       it 'return status false when touch out' do
         subject.top_up(10)
@@ -77,7 +76,7 @@ describe Oystercard do
         expect(subject.in_journey?).to eq(true)
       end
       it 'and it raises an error when touch in and card has not enough money for a journey' do
-        expect { subject.touch_in(station) }.to  raise_error(ERROR_MESSAGES[:minimum_fair])
+        expect { subject.touch_in(station) }.to raise_error(ERROR_MESSAGES[:minimum_fair])
       end
       it 'and saves a station when touch in' do
         subject.top_up(10)
@@ -88,7 +87,7 @@ describe Oystercard do
       it 'when touch out it changes the balane on the card' do
         subject.top_up(10)
         subject.touch_in(station)
-        expect{ subject.balance }.to change { subject.send(:deduct, MINIMUM_FAIR) }.by(-1)
+        expect { subject.balance }.to change { subject.send(:deduct, MINIMUM_FAIR) }.by(-1)
       end
       it 'when touch out it changes the balane on the card' do
         subject.top_up(10)

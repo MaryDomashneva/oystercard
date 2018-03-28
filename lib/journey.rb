@@ -10,7 +10,7 @@ class Journey
   end
 
   def complete?
-    return true if exit_station != nil && entry_station != nil
-    return false if exit_station == nil || entry_station == nil
+    return true if !exit_station.nil? && !entry_station.nil?
+    return false if exit_station.nil? || entry_station.nil?
   end
 end

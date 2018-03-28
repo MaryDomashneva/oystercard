@@ -8,9 +8,9 @@ class FareCalculator
 
   def calculator(journey)
     amount = MINIMUM_FAIR
-    amount += PENALTY_CHARGE if !journey.complete?
+    amount += PENALTY_CHARGE unless journey.complete?
     amount += BOUNDARY_CROSSED * cross_border(journey) if journey.complete?
-    return amount
+    amount
   end
 
   def cross_border(journey)
