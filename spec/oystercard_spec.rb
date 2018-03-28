@@ -12,7 +12,9 @@ describe Oystercard do
     it { expect(subject).to respond_to :touch_out}
     it { expect(subject).to respond_to :in_journey?}
     it { expect(subject).to respond_to(:top_up).with(1).argument }
+
     let(:station) { double :station }
+
     before {
       allow(station).to receive(:pass).and_return(true)
     }
@@ -50,10 +52,23 @@ describe Oystercard do
     end
 
     context 'Oyster card can be in a journey' do
+      let(:station_1) { double :station }
+      let(:station_2) { double :station }
+      let(:journey) { double :journey }
+
+      before {
+        allow(journey).to receive(:entry_station).and_return(station_1)
+        allow(journey).to receive(:exit_station).and_return(station_2)
+        allow(station_1).to receive(:zone).and_return(1)
+        allow(station_1).to receive(:pass)
+        allow(station_2).to receive(:zone).and_return(5)
+        allow(station_2).to receive(:pass)
+      }
+
       it 'return status false when touch out' do
         subject.top_up(10)
-        subject.touch_in(station)
-        subject.touch_out(station)
+        subject.touch_in(station_1)
+        subject.touch_out(station_2)
         expect(subject.in_journey?).to eq(false)
       end
       it 'and it returns true when touch in and card has enough money for a journey' do
@@ -77,16 +92,16 @@ describe Oystercard do
       end
       it 'when touch out it changes the balane on the card' do
         subject.top_up(10)
-        subject.touch_in(station)
-        subject.touch_out(station)
-        expect(subject.balance).to eq(9)
+        subject.touch_in(station_1)
+        subject.touch_out(station_2)
+        expect(subject.balance).to eq(5)
       end
       it 'and saves a station when touch out' do
         subject.top_up(10)
-        subject.touch_in(station)
-        subject.touch_out(station)
+        subject.touch_in(station_1)
+        subject.touch_out(station_2)
         journey = subject.journey_history.last
-        expect(journey.exit_station).to eq(station)
+        expect(journey.exit_station).to eq(station_2)
       end
     end
   end

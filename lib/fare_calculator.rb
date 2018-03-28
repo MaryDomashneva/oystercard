@@ -14,6 +14,6 @@ class FareCalculator
   end
 
   def cross_border(journey)
-    abs(journey.entry_station.zone - journey.exit_station.zone )
+    (journey.entry_station.zone - journey.exit_station.zone).abs
   end
 end

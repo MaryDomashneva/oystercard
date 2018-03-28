@@ -11,8 +11,4 @@ class Station
   def pass
     @access = true
   end
-
-  def reject
-    @access = false
-  end
 end
