@@ -9,7 +9,6 @@ ERROR_MESSAGES = {
 describe Oystercard do
   context 'when initialized responds to methods' do
     it { expect(subject).to respond_to(:top_up).with(1).argument }
-    it { expect(subject).to respond_to(:initialize_journey).with(1).argument }
     it { expect(subject).to respond_to(:touch_in).with(1).argument }
     it { expect(subject).to respond_to :touch_out }
     it { expect(subject).to respond_to :in_journey? }

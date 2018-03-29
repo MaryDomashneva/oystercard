@@ -1,6 +1,7 @@
 require_relative './station'
 require_relative './journey'
 require_relative './fare_calculator'
+require_relative './journeylog'
 
 class Oystercard
   attr_reader :balance
@@ -15,7 +16,7 @@ class Oystercard
     minimum_fair: 'Minimum amount to start a journey is 1 GBR'
   }.freeze
 
-  def initialize(balance = 0, journey_history = [], current_journey = nil, fare_calculator = FareCalculator.new)
+  def initialize(balance = 0, journey_history = JourneyLog.new, current_journey = nil, fare_calculator = FareCalculator.new)
     @balance = balance
     @journey_history = journey_history
     @current_journey = current_journey
@@ -27,8 +28,6 @@ class Oystercard
     @balance += amount
     @balance
   end
-
-
 
   def touch_in(station)
     if !@current_journey.nil?
@@ -45,7 +44,7 @@ class Oystercard
       deduct(amount)
     else
       @current_journey.exit_station = station
-      @journey_history[@journey_history.count - 1] = @current_journey
+      @journey_history.update_last_journey(@current_journey)
       amount = @fare_calculator.calculator(@current_journey)
       deduct(amount)
       @current_journey = nil
@@ -64,7 +63,7 @@ class Oystercard
     station.pass
     @current_journey = Journey.new
     @current_journey.entry_station = station
-    @journey_history << @current_journey
+    @journey_history.add_journey(@current_journey)
     in_journey?
   end
 
