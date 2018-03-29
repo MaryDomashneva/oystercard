@@ -11,7 +11,7 @@ class Oystercard
   MINIMUM_FAIR = 1
 
   ERROR_MESSAGES = {
-    exceeded_limit: 'The amount you are trying to top up is above limit = 90 GBR',
+    exceeded_limit: 'The amount you are trying to top_up is above limit = 90 GBR',
     minimum_fair: 'Minimum amount to start a journey is 1 GBR'
   }.freeze
 
@@ -28,24 +28,14 @@ class Oystercard
     @balance
   end
 
+
+
   def touch_in(station)
     if !@current_journey.nil?
       amount = @fare_calculator.calculator(@current_journey)
       deduct(amount)
-      raise ERROR_MESSAGES[:minimum_fair] unless has_minimum?
-      station.pass
-      @current_journey = Journey.new
-      @current_journey.entry_station = station
-      @journey_history << @current_journey
-      in_journey?
-    else
-      raise ERROR_MESSAGES[:minimum_fair] unless has_minimum?
-      station.pass
-      @current_journey = Journey.new
-      @current_journey.entry_station = station
-      @journey_history << @current_journey
-      in_journey?
     end
+    initialize_journey(station)
   end
 
   def touch_out(station)
@@ -68,6 +58,15 @@ class Oystercard
   end
 
   private
+
+  def initialize_journey(station)
+    raise ERROR_MESSAGES[:minimum_fair] unless has_minimum?
+    station.pass
+    @current_journey = Journey.new
+    @current_journey.entry_station = station
+    @journey_history << @current_journey
+    in_journey?
+  end
 
   def limit_reached?(amount)
     @balance + amount > DEFAULT_CAPACITY

@@ -2,16 +2,18 @@ require 'oystercard'
 DEFAULT_CAPACITY = 90
 MINIMUM_FAIR = 1
 ERROR_MESSAGES = {
-  exceeded_limit: 'The amount you are trying to top up is above limit = 90 GBR',
+  exceeded_limit: 'The amount you are trying to top_up is above limit = 90 GBR',
   minimum_fair: 'Minimum amount to start a journey is 1 GBR'
 }.freeze
 
 describe Oystercard do
   context 'when initialized responds to methods' do
+    it { expect(subject).to respond_to(:top_up).with(1).argument }
+    it { expect(subject).to respond_to(:initialize_journey).with(1).argument }
     it { expect(subject).to respond_to(:touch_in).with(1).argument }
     it { expect(subject).to respond_to :touch_out }
     it { expect(subject).to respond_to :in_journey? }
-    it { expect(subject).to respond_to(:top_up).with(1).argument }
+
 
     let(:station) { double :station }
 
@@ -19,7 +21,7 @@ describe Oystercard do
       allow(station).to receive(:pass).and_return(true)
     end
 
-    context 'when initial balance set-up to "0"' do
+    context 'when initial balance set_up to "0"' do
       it 'uses that balance' do
         balance = 0
         card = Oystercard.new(0)
@@ -27,18 +29,18 @@ describe Oystercard do
       end
 
       context 'Oyser card can be top_up' do
-        context 'when the amount of top_up fit the default capacity' do
-          it 'returns new balance when topped_up' do
-            amount = 80
-            expect(subject.top_up(amount)).to eq(80)
-          end
-        end
-        context 'when the amount of top_up does not fit the default capacity' do
-          it 'raises an error' do
-            expect { subject.top_up(100) }.to raise_error(ERROR_MESSAGES[:exceeded_limit])
-          end
-        end
-      end
+       context 'when the amount of top_up fit the default capacity' do
+         it 'returns new balance when topped_up' do
+           amount = 80
+           expect(subject.top_up(amount)).to eq(80)
+         end
+       end
+       context 'when the amount of top_up does not fit the default capacity' do
+         it 'raises an error' do
+           expect { subject.top_up(100) }.to raise_error(ERROR_MESSAGES[:exceeded_limit])
+         end
+       end
+     end
 
       context 'Oyster card can be deduct' do
         it 'returns new balance when deduct' do
@@ -64,38 +66,38 @@ describe Oystercard do
         allow(station_2).to receive(:pass)
       end
 
-      it 'is not in a journey anymore when touch out' do
+      it 'is not in a journey anymore when touch_out' do
         subject.top_up(10)
         subject.touch_in(station_1)
         subject.touch_out(station_2)
         expect(subject.in_journey?).to eq(false)
       end
-      it 'is in a journey when touch in and card has enough money for a journey' do
+      it 'is in a journey when touch_in and card has enough money for a journey' do
         subject.top_up(10)
         subject.touch_in(station)
         expect(subject.in_journey?).to eq(true)
       end
-      it 'and raises an error when touch in and card has not enough money for a journey' do
+      it 'and raises an error when touch_in and card has not enough money for a journey' do
         expect { subject.touch_in(station) }.to raise_error(ERROR_MESSAGES[:minimum_fair])
       end
-      it 'and saves a station when touch in' do
+      it 'and saves a station when touch_in' do
         subject.top_up(10)
         subject.touch_in(station)
         journey = subject.journey_history.last
         expect(journey.entry_station).to eq(station)
       end
-      it 'and changes the balane on the card when touch out' do
+      it 'and changes the balane on the card when touch_out' do
         subject.top_up(10)
         subject.touch_in(station)
         expect { subject.balance }.to change { subject.send(:deduct, MINIMUM_FAIR) }.by(-1)
       end
-      it 'and changes the balane on the card when touch out' do
+      it 'and changes the balane on the card when touch_out' do
         subject.top_up(10)
         subject.touch_in(station_1)
         subject.touch_out(station_2)
         expect(subject.balance).to eq(5)
       end
-      it 'and charges penalty when pouch-in and previous journey not complete' do
+      it 'and charges penalty when touch_in and previous journey not complete' do
         subject.top_up(10)
         subject.touch_in(station_1)
         subject.touch_in(station_2)
@@ -106,7 +108,7 @@ describe Oystercard do
         subject.touch_out(station_2)
         expect(subject.balance).to eq(3)
       end
-      it 'and saves a station when touch out' do
+      it 'and saves a station when touch_out' do
         subject.top_up(10)
         subject.touch_in(station_1)
         subject.touch_out(station_2)
