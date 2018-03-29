@@ -101,6 +101,11 @@ describe Oystercard do
         subject.touch_in(station_2)
         expect(subject.balance).to eq(3)
       end
+      it 'and charges penalty when touch_out without touch_in' do
+        subject.top_up(10)
+        subject.touch_out(station_2)
+        expect(subject.balance).to eq(3)
+      end
       it 'and saves a station when touch out' do
         subject.top_up(10)
         subject.touch_in(station_1)

@@ -4,6 +4,7 @@ class FareCalculator
 
   BOUNDARY_CROSSED = 1
   PENALTY_CHARGE = 6
+  MINIMUM_FAIR = 1
 
   def calculator(journey)
       amount = MINIMUM_FAIR
