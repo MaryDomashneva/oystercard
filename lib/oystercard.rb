@@ -30,7 +30,7 @@ class Oystercard
   end
 
   def touch_in(station)
-    if !@current_journey.nil?
+    unless @current_journey.nil?
       amount = @fare_calculator.calculator(@current_journey)
       deduct(amount)
     end

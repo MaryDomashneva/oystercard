@@ -13,7 +13,6 @@ describe Oystercard do
     it { expect(subject).to respond_to :touch_out }
     it { expect(subject).to respond_to :in_journey? }
 
-
     let(:station) { double :station }
 
     before do
@@ -28,18 +27,18 @@ describe Oystercard do
       end
 
       context 'Oyser card can be top_up' do
-       context 'when the amount of top_up fit the default capacity' do
-         it 'returns new balance when topped_up' do
-           amount = 80
-           expect(subject.top_up(amount)).to eq(80)
-         end
-       end
-       context 'when the amount of top_up does not fit the default capacity' do
-         it 'raises an error' do
-           expect { subject.top_up(100) }.to raise_error(ERROR_MESSAGES[:exceeded_limit])
-         end
-       end
-     end
+        context 'when the amount of top_up fit the default capacity' do
+          it 'returns new balance when topped_up' do
+            amount = 80
+            expect(subject.top_up(amount)).to eq(80)
+          end
+        end
+        context 'when the amount of top_up does not fit the default capacity' do
+          it 'raises an error' do
+            expect { subject.top_up(100) }.to raise_error(ERROR_MESSAGES[:exceeded_limit])
+          end
+        end
+      end
 
       context 'Oyster card can be deduct' do
         it 'returns new balance when deduct' do
