@@ -119,4 +119,21 @@ RuntimeError (The amount you are trying to top up is above limit = 90 GBR)
  => 38 
 2.5.0 :020 > 
 ```
-#5 It charges penalty = 6 plus minimum fare charge = 1, when fail ```touch_in```. Should deduct 7 out of balance = 45. New balance should be = 38
+#5 It charges penalty = 6 plus minimum fare charge = 1, when fail ```touch_in```. Should deduct 7 out of balance = 50. New balance should be = 43
+```
+2.5.0 :001 > oystercard = Oystercard.new
+ => #<Oystercard:0x00007fad288c0780 @balance=0, @journey_history=[], @current_journey=nil, @fare_calculator=#<FareCalculator:0x00007fad288c0730>> 
+2.5.0 :002 > station_1 = Station.new(false, 1)
+ => #<Station:0x00007fad288a5048 @access=false, @zone=1> 
+2.5.0 :003 > station_2 = Station.new(false, 4)
+ => #<Station:0x00007fad288373e0 @access=false, @zone=4> 
+2.5.0 :004 > oystercard.top_up(50)
+ => 50 
+2.5.0 :005 > oystercard.balance
+ => 50 
+2.5.0 :006 > oystercard.touch_out(station_2)
+ => 43 
+2.5.0 :007 > oystercard.balance
+ => 43 
+2.5.0 :008 > 
+```
