@@ -1,4 +1,4 @@
-require_relative 'oystercard'
+require_relative './oystercard'
 
 class Station
   attr_accessor :zone

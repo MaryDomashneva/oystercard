@@ -64,18 +64,18 @@ describe Oystercard do
         allow(station_2).to receive(:pass)
       end
 
-      it 'return status false when touch out' do
+      it 'is not in a journey anymore when touch out' do
         subject.top_up(10)
         subject.touch_in(station_1)
         subject.touch_out(station_2)
         expect(subject.in_journey?).to eq(false)
       end
-      it 'and it returns true when touch in and card has enough money for a journey' do
+      it 'is in a journey when touch in and card has enough money for a journey' do
         subject.top_up(10)
         subject.touch_in(station)
         expect(subject.in_journey?).to eq(true)
       end
-      it 'and it raises an error when touch in and card has not enough money for a journey' do
+      it 'and raises an error when touch in and card has not enough money for a journey' do
         expect { subject.touch_in(station) }.to raise_error(ERROR_MESSAGES[:minimum_fair])
       end
       it 'and saves a station when touch in' do
@@ -84,16 +84,22 @@ describe Oystercard do
         journey = subject.journey_history.last
         expect(journey.entry_station).to eq(station)
       end
-      it 'when touch out it changes the balane on the card' do
+      it 'and changes the balane on the card when touch out' do
         subject.top_up(10)
         subject.touch_in(station)
         expect { subject.balance }.to change { subject.send(:deduct, MINIMUM_FAIR) }.by(-1)
       end
-      it 'when touch out it changes the balane on the card' do
+      it 'and changes the balane on the card when touch out' do
         subject.top_up(10)
         subject.touch_in(station_1)
         subject.touch_out(station_2)
         expect(subject.balance).to eq(5)
+      end
+      it 'and charges penalty when pouch-in and previous journey not complete' do
+        subject.top_up(10)
+        subject.touch_in(station_1)
+        subject.touch_in(station_2)
+        expect(subject.balance).to eq(3)
       end
       it 'and saves a station when touch out' do
         subject.top_up(10)

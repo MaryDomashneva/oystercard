@@ -2,7 +2,7 @@ require 'oystercard'
 
 describe FareCalculator do
   context 'when initialized' do
-    it { expect(subject).to respond_to :calculator }
+    it { expect(subject).to respond_to(:calculator).with(1).argument }
     it { expect(subject).to respond_to(:cross_border).with(1).argument }
     let(:station_1) { double :station }
     let(:station_2) { double :station }

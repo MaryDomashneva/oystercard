@@ -1,4 +1,4 @@
-require_relative 'oystercard'
+require_relative './oystercard'
 
 class Journey
   attr_accessor :entry_station

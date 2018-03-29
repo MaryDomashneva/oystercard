@@ -1,6 +1,6 @@
-require_relative 'station'
-require_relative 'journey'
-require_relative 'fare_calculator'
+require_relative './station'
+require_relative './journey'
+require_relative './fare_calculator'
 
 class Oystercard
   attr_reader :balance
@@ -28,12 +28,23 @@ class Oystercard
   end
 
   def touch_in(station)
-    raise ERROR_MESSAGES[:minimum_fair] unless has_minimum?
-    station.pass
-    @current_journey = Journey.new
-    @current_journey.entry_station = station
-    @journey_history << @current_journey
-    in_journey?
+    if !@current_journey.nil?
+      amount = @fare_calculator.calculator(@current_journey)
+      deduct(amount)
+      raise ERROR_MESSAGES[:minimum_fair] unless has_minimum?
+      station.pass
+      @current_journey = Journey.new
+      @current_journey.entry_station = station
+      @journey_history << @current_journey
+      in_journey?
+    else
+      raise ERROR_MESSAGES[:minimum_fair] unless has_minimum?
+      station.pass
+      @current_journey = Journey.new
+      @current_journey.entry_station = station
+      @journey_history << @current_journey
+      in_journey?
+    end
   end
 
   def touch_out(station)
