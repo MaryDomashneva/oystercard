@@ -1,8 +1,11 @@
-[![Build Status](https://travis-ci.org/MaryDomashneva/oystercard.svg?branch=master)](https://travis-ci.org/MaryDomashneva/oystercard)
+[![Build Status](https://travis-ci.org/MaryDomashneva/oystercard-challenge.svg?branch=master)](https://travis-ci.org/MaryDomashneva/oystercard-challenge)
 
-Oyster project
+Oystercard Challenge
+==================
 
-## Task
+Task
+-----
+
 ```
 In order to use public transport
 As a customer
@@ -52,9 +55,21 @@ In order to be charged the correct amount
 As a customer
 I need to have the correct fare calculated
 ```
+Technology used
+-----
 
+* Ruby 2.5.0
+* Rspec
 
-## Result
+Run project
+-----
+
+* In order to run tests, clone project, install ruby 2.5.0, install Rspec ```gem 'rspc'``` and ```rspec``` command in terminal.
+* The easiest way to try project is in IRB: ```inside terminal irb -r./airoport_challenge```
+
+Result
+-----
+
 * Oystercard allowes you to trevel between different tube stations.
 * It can be top up, but the max amount is limited.
 * Fare charges depend on travel zones.
@@ -63,7 +78,8 @@ I need to have the correct fare calculated
 * Penalty charges when failed touch-in or touch-out.
 * As a user you can see Oyster card history.
 
-## Examples
+Examples
+-----
 #1 Oystercard balance can be ```top_up``` with limited amount.
 If the amount of top up exceed the maximum capasity the error will be raised.
 ```
