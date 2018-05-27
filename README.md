@@ -3,7 +3,7 @@
 Oystercard Challenge
 ==================
 
-Task
+Task:
 -----
 
 ```
@@ -55,19 +55,19 @@ In order to be charged the correct amount
 As a customer
 I need to have the correct fare calculated
 ```
-Technology used
+Technology used:
 -----
 
 * Ruby 2.5.0
 * Rspec
 
-Run project
+Run project:
 -----
 
 * In order to run tests, clone project, install ruby 2.5.0, install Rspec ```gem 'rspc'``` and ```rspec``` command in terminal.
 * The easiest way to try project is in IRB: ```inside terminal irb -r./airoport_challenge```
 
-Result
+Result:
 -----
 
 * Oystercard allowes you to trevel between different tube stations.
@@ -78,7 +78,7 @@ Result
 * Penalty charges when failed touch-in or touch-out.
 * As a user you can see Oyster card history.
 
-Examples
+Examples:
 -----
 #1 Oystercard balance can be ```top_up``` with limited amount.
 If the amount of top up exceed the maximum capasity the error will be raised.
